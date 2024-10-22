@@ -2,21 +2,14 @@ import os
 from collections import Counter
 import re
 
-import nltk
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-import pandas as pd
-
-from typing import List
-
-
 global merged_text
-arch_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Arch"
-bud_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Bud"
-elek_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Elek"
-inf_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Inf"
-mech_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Mech"
-zarz_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Zarz"
+
+arch_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\Dane\\Arch"
+bud_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\Dane\\Bud"
+elek_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\Dane\\Elek"
+inf_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\Dane\\Inf"
+mech_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\Dane\\Mech"
+zarz_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\Dane\\Zarz"
 
 link_list = [arch_path, bud_path, elek_path, inf_path, mech_path, zarz_path]
 def read_and_merge_txt_files(folder_path):
@@ -47,7 +40,6 @@ def get_most_common_words(words, top_n=10):
     word_counts = Counter(words)
     # Zwrócenie top_n najczęściej występujących słów
     return word_counts.most_common(top_n)
-
 
 def load_stopwords(stopwords_file):
     with open(stopwords_file, 'r', encoding='utf-8') as file:
@@ -83,36 +75,3 @@ if __name__ == "__main__":
     stopWordsOn=True
     most_popular_words(10)
 
-    # documents = [
-    #     "Szybki brązowy lis przeskoczył nad leniwym psem.",
-    #     "Nigdy nie przeskakuj nad leniwym psem szybko.",
-    #     "Lisy są szybkie i sprytne.",
-    #     "Psy są lojalne i leniwe."
-    # ]
-
-
-    # merged_text = read_and_merge_txt_files(elek_path)
-    # words = preprocess_text(merged_text, stopWordsOn)
-
-    # documents = merged_text.splitlines()
-    # print(merged_text)
-    #
-    # vectorizer_bow = CountVectorizer(stop_words=stop_words)  # Bag of words
-    # vectorizer_binary = CountVectorizer(stop_words=stop_words, binary=True)  # Binarny
-    #
-    # # Inicjalizacja TfidfVectorizer
-    # vectorizer_tfidf = TfidfVectorizer(stop_words=stop_words)
-    #
-    # # Generowanie reprezentacji dokumentów
-    # X_bow = vectorizer_bow.fit_transform(documents)  # Bag of words
-    # X_binary = vectorizer_binary.fit_transform(documents)  # Binarna
-    # X_tfidf = vectorizer_tfidf.fit_transform(documents)  # TF-IDF
-    #
-    # # Konwertowanie wyników do DataFrame (z zachowaniem etykiet kolumn, czyli słów)
-    # df_bow = pd.DataFrame(X_bow.toarray(), columns=vectorizer_bow.get_feature_names_out())
-    # df_binary = pd.DataFrame(X_binary.toarray(), columns=vectorizer_binary.get_feature_names_out())
-    # df_tfidf = pd.DataFrame(X_tfidf.toarray(), columns=vectorizer_tfidf.get_feature_names_out())
-    #
-    # df_bow.to_csv("bag_of_words.csv", index=False)
-    # df_binary.to_csv("binary_representation.csv", index=False)
-    # df_tfidf.to_csv("tfidf_representation.csv", index=False)

@@ -110,7 +110,7 @@ if __name__ == "__main__":
     all_text = load_text_from_folders(main_path)
 
     # Wyświetlenie części wynikowego tekstu (opcjonalnie)
-    print(all_text[:1000])  # Wyświetla pierwsze 1000 znaków wczytanego tekstu
+    #print(all_text[:1000])  # Wyświetla pierwsze 1000 znaków wczytanego tekstu
 
     # merged_text = read_and_merge_txt_files(elek_path)
     # words = clean_text(merged_text)
