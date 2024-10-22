@@ -1,7 +1,7 @@
 import os
 from collections import Counter
 import re
-
+import glob
 import nltk
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
@@ -17,8 +17,23 @@ elek_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Elek"
 inf_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Inf"
 mech_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Mech"
 zarz_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11\\Zarz"
+main_path = "C:\\Users\\Bartucci\\Desktop\\Mag2\\EZI\\11"
 
 link_list = [arch_path, bud_path, elek_path, inf_path, mech_path, zarz_path]
+
+# Funkcja do wczytywania wszystkich plików tekstowych z folderów i podfolderów
+def load_text_from_folders(main_folder_path):
+    all_text = []  # Lista do przechowywania tekstu z wszystkich plików
+
+    for folder in os.listdir(main_folder_path):
+        folder_path = os.path.join(main_folder_path, folder)
+        if os.path.isdir(folder_path):
+            txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
+            for file_path in txt_files:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    file_content = file.read()
+                    all_text.append(file_content)
+    return "\n".join(all_text)
 def read_and_merge_txt_files(folder_path):
     # Lista na przechowywanie całej zawartości plików
 
@@ -53,26 +68,29 @@ def load_stopwords(stopwords_file):
     with open(stopwords_file, 'r', encoding='utf-8') as file:
         stopwords = set(file.read().splitlines())
     return stopwords
-link_list = [arch_path, bud_path, elek_path, inf_path, mech_path, zarz_path]
+
 def most_popular_words(num_words):
     for path in link_list:
         print(path)
-        merged_text = read_and_merge_txt_files(path)
+        merged_text = read_and_merge_txt_files(elek_path)
         words = preprocess_text(merged_text,stopWordsOn)
         most_common_words = get_most_common_words(words, num_words)
-        if path == arch_path:  print("Wydział Architektury")
-        elif path == bud_path: print("Wydział Budownictwa ")
-        elif path == elek_path:print("Wydział Elektryczny ")
-        elif path == inf_path: print("Wydział Informatyki ")
-        elif path == mech_path: print("Wydział Mechaniczny")
-        elif path == zarz_path: print("Wydział Inżynierii i Zarządzania")
+        print("Najczęściej występujące słowa z stopwords:" if stopWordsOn else
+              "Najczęściej występujące słowa bez stopwords:")
         for word, count in most_common_words:
             print(f"{word}: {count}")
 def load_stopwords(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:
         stopwords = file.read().splitlines()  # Czytamy plik i tworzymy listę słów
     return stopwords
-
+def clean_text(text):
+    # Usuwanie znaków interpunkcyjnych
+    text = re.sub(r'[^\w\s]', '', text)
+    # Usuwanie liczb
+    text = re.sub(r'\d+', '', text)
+    # Konwersja na małe litery i dzielenie na słowa
+    words = text.lower().split()
+    return words
 
 if __name__ == "__main__":
     #departments = ["Arch", "Bud", "Elek", "Inf", "Mech", "Zarz"]
@@ -80,8 +98,8 @@ if __name__ == "__main__":
     stopwords_file = "polish.stopwords.txt"
 
     stopwords = load_stopwords("polish.stopwords.txt")
-    stopWordsOn=True
-    most_popular_words(10)
+    stopWordsOn=False
+    # most_popular_words(10)
 
     # documents = [
     #     "Szybki brązowy lis przeskoczył nad leniwym psem.",
@@ -89,26 +107,29 @@ if __name__ == "__main__":
     #     "Lisy są szybkie i sprytne.",
     #     "Psy są lojalne i leniwe."
     # ]
+    all_text = load_text_from_folders(main_path)
 
+    # Wyświetlenie części wynikowego tekstu (opcjonalnie)
+    print(all_text[:1000])  # Wyświetla pierwsze 1000 znaków wczytanego tekstu
 
     # merged_text = read_and_merge_txt_files(elek_path)
-    # words = preprocess_text(merged_text, stopWordsOn)
-
-    # documents = merged_text.splitlines()
-    # print(merged_text)
+    # words = clean_text(merged_text)
     #
-    # vectorizer_bow = CountVectorizer(stop_words=stop_words)  # Bag of words
-    # vectorizer_binary = CountVectorizer(stop_words=stop_words, binary=True)  # Binarny
+    # documents = words
+    # # print(merged_text)
     #
-    # # Inicjalizacja TfidfVectorizer
-    # vectorizer_tfidf = TfidfVectorizer(stop_words=stop_words)
+    # vectorizer_bow = CountVectorizer(stop_words=stopwords)  # Bag of words
+    # vectorizer_binary = CountVectorizer(stop_words=stopwords, binary=True)  # Binarny
     #
-    # # Generowanie reprezentacji dokumentów
+    #
+    # vectorizer_tfidf = TfidfVectorizer(stop_words=stopwords)
+    #
+    #
     # X_bow = vectorizer_bow.fit_transform(documents)  # Bag of words
-    # X_binary = vectorizer_binary.fit_transform(documents)  # Binarna
+    # X_binary = vectorizer_binary.fit_transform(documents)  # Binary
     # X_tfidf = vectorizer_tfidf.fit_transform(documents)  # TF-IDF
     #
-    # # Konwertowanie wyników do DataFrame (z zachowaniem etykiet kolumn, czyli słów)
+    #
     # df_bow = pd.DataFrame(X_bow.toarray(), columns=vectorizer_bow.get_feature_names_out())
     # df_binary = pd.DataFrame(X_binary.toarray(), columns=vectorizer_binary.get_feature_names_out())
     # df_tfidf = pd.DataFrame(X_tfidf.toarray(), columns=vectorizer_tfidf.get_feature_names_out())
