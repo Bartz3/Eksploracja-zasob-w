@@ -118,4 +118,4 @@ if __name__ == "__main__":
 
     # Uruchomienie porównania słów między wydziałami
     # Użyj 'bow' (Bag of Words) lub 'tfidf' (TF-IDF)
-    most_popular_words(stopwords, stopWordsOn, method='tfidf')
+    most_popular_words(stopwords, stopWordsOn, method='bow')
