@@ -5,7 +5,6 @@ import re
 def read_and_merge_txt_files(folder_path):
     # Lista na przechowywanie całej zawartości plików
     merged_text = ""
-
     # Iterowanie przez pliki w podanym folderze
     for filename in os.listdir(folder_path):
         if filename.endswith(".txt"):
@@ -14,7 +13,6 @@ def read_and_merge_txt_files(folder_path):
                 merged_text += file.read() + " "
 
     return merged_text
-
 def preprocess_text(text, stopWordsOn):
     text = re.sub(r'[^\w\s]', '', text)  # Usuwa znaki interpunkcyjne
     text = re.sub(r'\d+', '', text)      # Usuwa liczby
@@ -40,9 +38,10 @@ def load_stopwords(stopwords_file):
 
 
 if __name__ == "__main__":
-    folder_path = "C:\\Users\\Bartucci\\Desktop\\EZI\\1\\WIiZ"
+    #folder_path = "C:\\Users\\Bartucci\\Desktop\\EZI\\1\\WIiZ"
+    folder_path = "E:\\OneDrivePB\\OneDrive - Politechnika Białostocka\\Pulpit\\EZI\\WIiZ"
     stopwords_file = "polish.stopwords.txt"
-    stopWordsOn=False
+    stopWordsOn=True
 
     stopwords = load_stopwords(stopwords_file)
     merged_text = read_and_merge_txt_files(folder_path)
